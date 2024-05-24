@@ -8,68 +8,76 @@ const PatientForm = () => {
     gender: '',
     age: '',
     disease: '',
-    doctorId: '',
+    doctor: {
+        id:0
+    }
+      
+    
   });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setPatientData({ ...patientData, [name]: value });
+    if (name === 'doctorId') {
+      setPatientData({ ...patientData, doctor: { ...patientData.doctor, id: value } });
+    } else {
+      setPatientData({ ...patientData, [name]: value });
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      const response = await axios.post('https://backendhospital-ji3g.onrender.com/patients', patientData);
+
+      const response = await axios.post('http://localhost:8080/patient', patientData);
+
       console.log('Patient created:', response.data);
+
     } catch (error) {
-      console.error('Error creating:', error);
+      console.error('Error creating patient:', error);
     }
   };
 
   return (
-    <div>
-      <center>
-        <div>
-          <h2>Create New Patient</h2>
-          <form onSubmit={handleSubmit}>
-            <label>
-              Name:
-              <input type="text" name="name" value={patientData.name} onChange={handleChange} required />
-            </label>
-            <br />
-            <label>
-              Weight:
-              <input type="text" name="weight" value={patientData.weight} onChange={handleChange} required />
-            </label>
-            <br />
-            <label>
-              Gender:
-              <input type="text" name="gender" value={patientData.gender} onChange={handleChange} required />
-            </label>
-            <br />
-            <label>
-              Age:
-              <input type="text" name="age" value={patientData.age} onChange={handleChange} required />
-            </label>
-            <br />
-            <label>
-              Disease:
-              <input type="text" name="disease" value={patientData.disease} onChange={handleChange} required />
-            </label>
-            <br />
-            <label>
-              Doctor ID:
-              <input type="text" name="doctorId" value={patientData.doctorId} onChange={handleChange} required />
-            </label>
-            <br />
-            <button type="submit">Create Patient</button>
-          </form>
-        </div>
-      </center>
-    </div>
+    <center>
+      <div>
+        <h2>Create New Patient</h2>
+        <form onSubmit={handleSubmit}>
+          <label>
+            Name:
+            <input type="text" name="name" value={patientData.name} onChange={handleChange} required />
+          </label>
+          <br />
+          <label>
+            Weight:
+            <input type="text" name="weight" value={patientData.weight} onChange={handleChange} required />
+          </label>
+          <br />
+          <label>
+            Gender:
+            <input type="text" name="gender" value={patientData.gender} onChange={handleChange} required />
+          </label>
+          <br />
+          <label>
+            Age:
+            <input type="text" name="age" value={patientData.age} onChange={handleChange} required />
+          </label>
+          <br />
+          <label>
+            Disease:
+            <input type="text" name="disease" value={patientData.disease} onChange={handleChange} required />
+          </label>
+          <br />
+          <label>
+            Doctor ID:
+            <input type="text" name="doctorId" value={patientData.doctor.id} onChange={handleChange} required />
+          </label>
+          <br />
+          <button type="submit">Create Patient</button>
+        </form>
+      </div>
+    </center>
   );
 };
 
 export default PatientForm;
-

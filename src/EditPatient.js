@@ -8,7 +8,7 @@ const EditPatient = ({patientId, onClose, onUpdate}) => {
     //get
     const fetchPatientData = async () => {
       try {
-        const response = await axios.get(`https://backendhospital-ji3g.onrender.com/patients/${patientId}`);
+        const response = await axios.get(`http://localhost:8080/patient/${patientId}`);
         setPatientData(response.data);
       } catch (error) {
         console.error('Error fetching patient data for editing:', error);
@@ -20,7 +20,7 @@ const EditPatient = ({patientId, onClose, onUpdate}) => {
 
   const handleUpdate = async () => {
     try{
-      await axios.put(`https://backendhospital-ji3g.onrender.com/patients/${patientId}`, patientData);
+      await axios.put(`http://localhost:8080/patient/${patientId}`, patientData);
       onClose();
       onUpdate();
     } catch (error) {
@@ -31,6 +31,7 @@ const EditPatient = ({patientId, onClose, onUpdate}) => {
   const handleChange = (e) => {
     const {name, value} = e.target;
     setPatientData({...patientData, [name]: value});
+    
   };
 
   return (

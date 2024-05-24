@@ -8,7 +8,7 @@ const Doctor = () => {
     //get
     const fetchDoctors = async () => {
       try{
-        const response = await axios.get('https://backendhospital-ji3g.onrender.com/doctors');
+        const response = await axios.get('http://localhost:8080/doctor');
         setDoctors(response.data);
       } catch (error) {
         console.error('Error fetching doctors:', error);
@@ -26,7 +26,7 @@ const Doctor = () => {
         {
           doctors.map(doctor =>(
             <div key={doctor.id}>
-              <p><strong>{doctor.name}</strong> - {doctor.specialization}</p>
+              <p><strong>{doctor.name}</strong> - {doctor.speciality}</p>
               <p>Doctor ID: {doctor.id}</p>
             </div>
           ))

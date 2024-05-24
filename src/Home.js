@@ -8,61 +8,66 @@ const Home = () => {
   const [selectedDoctorId, setSelectedDoctorId] = useState(null);
   const [editPatientId, setEditPatientId] = useState(null);
 
+  useEffect(() => {
+    const fetchPatientsAndDoctors = async () => {
+      try {
+        const patientsResponse = await axios.get('http://localhost:8080/patient') ;
+        const doctorsResponse = await axios.get('http://localhost:8080/doctor');
+        setPatients(patientsResponse.data);
+        setDoctors(doctorsResponse.data);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
 
-useEffect(() => {
-  const fetchPatientsAndDoctors =  async () => {
-    try{
-      const patientsResponse = await axios.get('https://backendhospital-ji3g.onrender.com/patients');
-      const doctorsResponse = await axios.get('https://backendhospital-ji3g.onrender.com/doctors');
-      setPatients(patientsResponse.data);
-      setDoctors(doctorsResponse.data);
+    fetchPatientsAndDoctors();
+  }, []);
+
+  const handleDoctorChange = (event) => {
+   // const selectedDoctorId = event.target.value === "null" ? null : parseInt(event.target.value);
+
+    const selectedDoctorId =  parseInt(event.target.value);
+    setSelectedDoctorId(selectedDoctorId);
+  };
+
+  const filteredPatients = selectedDoctorId
+    ? patients.filter(patient => patient.doctor?.id === selectedDoctorId)
+    : patients;
+
+  const handleEdit = (patientId) => {
+    setEditPatientId(patientId);
+  };
+
+  const handleCloseEdit = () => {
+    setEditPatientId(null);
+  };
+
+  const handleUpdate = (updatedPatient) => {
+    //setPatients((prevPatients) => prevPatients.map((patient) =>
+     // patient.id === updatedPatient.id ? updatedPatient : patient
+    //));
+    setEditPatientId(null);
+  };
+
+  const handleDelete = async (patientId) => {
+    try {
+      await axios.delete(`http://localhost:8080/patient/${patientId}`);
+      setPatients((prevPatients) => prevPatients.filter((patient) => patient.id !== patientId));
     } catch (error) {
-      console.error('Error fetching data:, error');
+      console.error('Error deleting patient:', error);
     }
   };
 
-  fetchPatientsAndDoctors();
-}, []);
-
-const handleDoctorChange = (event) => {
-  const selectedDoctorId = parseInt(event.target.value);
-  setSelectedDoctorId(selectedDoctorId);
-};
-
-const filteredPatients = selectedDoctorId
-  ? patients.filter(patient => patient.doctor?.id === selectedDoctorId)
-  : patients;
-
-const handleEdit = (patientId) => {
-  setEditPatientId(patientId);
-};
-
-const handleCloseEdit = () => {
-  setEditPatientId(null);
-};
-
-const handleUpdate = () => {
-  setEditPatientId(null);
-};
-
-const handleDelete = async (patientId) => {
-  try{
-    await axios.delete(`https://backendhospital-ji3g.onrender.com/patients/${patientId}`);
-    setPatients((prevPatients) => prevPatients.filter((patient) => patient.id !== patientId));
-  } catch (error) {
-    console.error('Error deleting patients:', error);
-  }
-}
   return (
     <center>
       <div>
         <h2>Patients</h2>
         <label>Select Doctor: </label>
-        <select onChange={handleDoctorChange}>
-          <option value={null}>All Doctors</option>
+        <select onChange={handleDoctorChange} defaultValue="null">
+          <option value="null">All Doctors</option>
           {doctors.map((doctor) => (
             <option key={doctor.id} value={doctor.id}>
-              {doctor.name} - {doctor.specialization}
+              {doctor.name} - {doctor.speciality}
             </option>
           ))}
         </select>
@@ -89,7 +94,8 @@ const handleDelete = async (patientId) => {
                 <td>{patient.age}</td>
                 <td>{patient.disease}</td>
                 <td>
-                  {patient.doctor?.name} - {patient.doctor?.specialization}
+                  {patient.doctor?.name ? patient.doctor.name : 'Unknown Doctor'} - 
+                  {patient.doctor?.speciality ? patient.doctor.speciality : 'Unknown Speciality'}
                 </td>
                 <td>
                   <button onClick={() => handleEdit(patient.id)}>Edit</button>
@@ -115,4 +121,3 @@ const handleDelete = async (patientId) => {
 };
 
 export default Home;
-
