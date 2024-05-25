@@ -11,14 +11,14 @@ const Home = () => {
   useEffect(() => {
     const fetchPatientsAndDoctors = async () => {
       try {
-        const patientsResponse = await axios.get('http://localhost:8080/patient') ;
-        const doctorsResponse = await axios.get('http://localhost:8080/doctor');
+        const patientsResponse = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/patient`) ;
+        const doctorsResponse = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/doctor`);
         setPatients(patientsResponse.data);
         setDoctors(doctorsResponse.data);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
-    };
+    }
 
     fetchPatientsAndDoctors();
   }, []);
@@ -51,7 +51,7 @@ const Home = () => {
 
   const handleDelete = async (patientId) => {
     try {
-      await axios.delete(`http://localhost:8080/patient/${patientId}`);
+      await axios.delete(`${process.env.REACT_APP_BACKEND_URL}/patient/${patientId}`);
       setPatients((prevPatients) => prevPatients.filter((patient) => patient.id !== patientId));
     } catch (error) {
       console.error('Error deleting patient:', error);

@@ -8,7 +8,7 @@ const EditPatient = ({patientId, onClose, onUpdate}) => {
     //get
     const fetchPatientData = async () => {
       try {
-        const response = await axios.get(`http://localhost:8080/patient/${patientId}`);
+        const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/patient/${patientId}`);
         setPatientData(response.data);
       } catch (error) {
         console.error('Error fetching patient data for editing:', error);
@@ -20,7 +20,7 @@ const EditPatient = ({patientId, onClose, onUpdate}) => {
 
   const handleUpdate = async () => {
     try{
-      await axios.put(`http://localhost:8080/patient/${patientId}`, patientData);
+      await axios.put(`${process.env.REACT_APP_BACKEND_URL}/patient/${patientId}`, patientData);
       onClose();
       onUpdate();
     } catch (error) {

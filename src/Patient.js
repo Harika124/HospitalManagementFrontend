@@ -29,7 +29,7 @@ const PatientForm = () => {
 
     try {
 
-      const response = await axios.post('http://localhost:8080/patient', patientData);
+      const response = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/patient`, patientData);
 
       console.log('Patient created:', response.data);
 

@@ -8,7 +8,7 @@ const Doctor = () => {
     //get
     const fetchDoctors = async () => {
       try{
-        const response = await axios.get('http://localhost:8080/doctor');
+        const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/doctor`);
         setDoctors(response.data);
       } catch (error) {
         console.error('Error fetching doctors:', error);
